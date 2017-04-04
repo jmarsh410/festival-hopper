@@ -1,0 +1,108 @@
+.beers {
+  margin-bottom: 100px;
+}
+.beer.checkedIn {
+  opacity: .5;
+}
+.beer-main {
+  display: block;
+  padding: 10px;
+  background-color: #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+}
+.beer-image {
+  width: 50px;
+  height: 50px;
+  /*height: 50px;*/
+  background: #ccc;
+}
+.beer-image img {
+  width: 100%;
+}
+.beer-info {
+  flex: 1;
+  margin-left: 10px;
+}
+/*move this into a separate module*/
+.beer-checkbox {
+  max-height: 25px;
+}
+.checkbox {
+  position: relative;
+}
+.checkbox-input {
+  opacity: 0;
+  display: block;
+  width: 25px;
+  height: 25px;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+}
+.checkbox-vis {
+  display: block;
+  background: #ccc;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+.checkbox-vis:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  display: block;
+  width: 6px;
+  height: 12px;
+  border: solid #000;
+  border-width: 0 4px 4px 0;
+  transform: translateY(-2px) rotate(45deg);
+  transition: .1s opacity ease;
+  opacity: 0;
+}
+.checkbox-input:checked + .checkbox-vis:before {
+  opacity: 1;
+}
+.beer-drawer {
+  overflow:hidden;
+  max-height: 0px;
+  box-sizing: border-box;
+  transition: .3s max-height linear;
+}
+.beer.open .beer-drawer {
+  max-height: 300px;
+}
+.beer-drawerInner {
+  padding: 10px;
+}
+.beer-description {
+  width: 100%;
+  max-width: 100%;
+  min-height: 50px;
+  max-height: 100px;
+  margin-bottom: 10px;
+}
+.beer-rating {
+  display: flex;
+}
+.beer-slider {
+  flex: 1;
+}
+.beer-sliderValue {
+  padding: 10px;
+  background-color: #eee;
+  margin-left: 10px;
+  min-width: 55px;
+  text-align: center;
+  box-sizing: border-box;
+}

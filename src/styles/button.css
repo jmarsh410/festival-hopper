@@ -1,0 +1,21 @@
+.btn {
+  box-sizing: border-box;
+  padding: 10px;
+  color: white;
+  background-color: black;
+  text-decoration: none;
+}
+.btn--block {
+  display: block;
+}
+.btn-checkIn {
+  position: fixed;
+  bottom: 5px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 100px;
+  background-color: green;
+  border-radius: 5px;
+  color: white;
+}
