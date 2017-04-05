@@ -1,13 +1,14 @@
 /* jshint ignore:start */
 
 import React, { Component } from 'react';
+import AsyncList from './async-list';
 import StaticBeerList from './static-beer-list';
 import utils from '../utils/utils';
 
 // need to make an api call to get back all the beer info for each beer id
 // beer id needs to somehow be passed to this page from whatever link was pressed on the previous page
 
-class BreweryBeers extends Component {
+class BreweryBeerList extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -43,9 +44,9 @@ class BreweryBeers extends Component {
   }
   render() {
     return (
-      <StaticBeerList items={this.state.items}/>
+      <AsyncList type={StaticBeerList} items={this.state.items}/>
     );
   }
 }
 
-export default BreweryBeers;
+export default BreweryBeerList;
