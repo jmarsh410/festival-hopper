@@ -111,13 +111,6 @@ class StaticBeerList extends Component {
     }
   }
   render() {
-    // TODO: shouldnt affect state in render method. look at the docs for an alternative
-    if (this.state.items.length === 0 && this.props.items.length > 0) {
-      console.log('state was changed');
-      this.setState({
-        items: this.props.items
-      });
-    }
     let button = null;
     if (this.state.checked > 0) {
       button = <button className="btn btn-checkIn" onClick={this.handleCheckInClick}>Check In</button>;

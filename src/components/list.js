@@ -5,11 +5,6 @@ import '../styles/list.css';
 
 class List extends Component {
   render() {
-    if (this.props.items.length === 0) {
-      return (
-        <div>'loading...'</div>
-      );
-    }
     const Type = this.props.type;
     const html = this.props.items.map((item, i) => {
       // if the item doesn't have an id property, then default to showing the array index
