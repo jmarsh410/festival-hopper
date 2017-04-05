@@ -18,6 +18,8 @@ const utils = {
     // there is an undocumented api endpoint that the untappd website uses which can be used to get a brewery's beers
     // this endpoint is subject to removal/changes since it is undocumented
     return 'https://api.untappd.com/v4/brewery/beer_list/' + breweryId + '?access_token=' + localStorage.userToken + '&offset=0';
+
+    // documented api call https://untappd.com/api/docs#breweryinfo
     // return 'https://api.untappd.com/v4/brewery/info/'+ breweryId + '?access_token=' + localStorage.userToken;
   },
   generateBrewerySearchUrl(breweryName){
@@ -75,22 +77,6 @@ const utils = {
     });
     return breweries;
   },
-  // normalizeBeers(array){
-  //   let beers = [];
-  //   array.forEach(function(beer){
-  //     const normalizedBeer = {
-  //       id: beer.bid,
-  //       name: beer.beer_name,
-  //       brewery: beer.brewery.brewery_name,
-  //       image: beer.beer_label,
-  //       rating: beer.rating || 3,
-  //       isCheckedIn: beer.checkedIn,
-  //       isOpen: beer.open,
-  //     };
-  //     beers.push(normalizedBeer);
-  //   });
-  //   return beers;
-  // }
 };
 
 export default utils;
