@@ -25,7 +25,7 @@ const utils = {
   generateBrewerySearchUrl(breweryName){
     return 'https://api.untappd.com/v4/search/brewery/?access_token=' + localStorage.userToken + '&q=' + breweryName + '&limit=50';
   },
-  makeBreweryBeers(json){
+  makeBreweryBeers(json, id){
     // code for undocumented api call
     const array = json.response.beers.items;
 
@@ -42,10 +42,15 @@ const utils = {
         rating: 3,
         isCheckedIn: false,
         isOpen: false,
+        checked: false,
       };
       beers.push(normalizedBeer);
     });
-    return beers;
+    // return an object with 1 key/value corresponding to the list id and its items respectively
+    return {
+      id: id,
+      beers: beers,
+    };
   },
   makeCuratedListItems(array){
     let beers = [];
