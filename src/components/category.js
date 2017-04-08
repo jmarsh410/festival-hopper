@@ -6,11 +6,10 @@ import '../styles/category.css';
 
 class Category extends Component {
   render(){
-    const id = '/category/' + this.props.data.name.replace(' ', '-').toLowerCase();
+    const id = '/curated/' + this.props.data.name.replace(' ', '-').toLowerCase();
     return (
       <Link to={{
-        pathname: id,
-        state: { beers: this.props.data.beers },
+        pathname: id
       }} className="category">
         <div className="category-image">
           <img src={this.props.data.img} alt={this.props.data.name}/>
