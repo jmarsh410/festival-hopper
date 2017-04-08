@@ -10,7 +10,9 @@ class Beer extends Component {
     const name = this.props.data.name;
     const brewery = this.props.data.brewery;
     const image = this.props.data.image;
+    const checked = this.props.data.checked;
     const rating = this.props.data.rating;
+    const description = this.props.data.description;
     const isCheckedIn = this.props.data.isCheckedIn;
     const isOpen = this.props.data.isOpen;
     let classes = 'beer';
@@ -30,13 +32,13 @@ class Beer extends Component {
             <div className="beer-name">{name}</div>
             <div className="beer-brewery">{brewery}</div>
           </div>
-          <Checkbox classes="beer-checkbox"/>
+          <Checkbox classes="beer-checkbox" checked={checked}/>
         </div>
         <div className="beer-drawer">
           <div className="beer-drawerInner">
-            <textarea className="beer-description" maxLength="140"></textarea>
+            <textarea className="beer-description" maxLength="140" defaultValue={description}></textarea>
             <div className="beer-rating">
-              <input type="range" min="1" max="5" step=".25" defaultValue="3" className="beer-slider"/>
+              <input type="range" min="1" max="5" step=".25" defaultValue={rating} className="beer-slider"/>
               <div className="beer-sliderValue">{rating}</div>
             </div>
           </div>
