@@ -12,6 +12,7 @@ import Categories from './components/categories';
 import CuratedBeerList from './components/curated-beer-list';
 import StaticBeers from './components/static-beer-list';
 import BreweryBeerList from './components/brewery-beer-list';
+import BeerListContainer from './components/beer-list-container';
 import './App.css';
 
 const urlParameter = '#access_token=';
@@ -54,8 +55,8 @@ class App extends Component {
             localStorage.removeItem('userToken');
             return (<Redirect to="/"/>);
           }}/>
-          <Route path="/category/:categoryId" component={CuratedBeerList}/>
-          <Route path="/brewery/:breweryId" component={BreweryBeerList}/>
+          <Route path="/curated/:listId" component={BeerListContainer}/>
+          <Route path="/brewery/:listId" component={BeerListContainer}/>
           <Route path="/login" component={Login}/>
         </div>
       </Router>
