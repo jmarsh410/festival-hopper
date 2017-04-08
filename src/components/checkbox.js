@@ -7,7 +7,7 @@ class Checkbox extends Component {
     const classes = this.props.classes + ' checkbox';
     return (
       <div className={classes}>
-        <input type="checkbox" className="checkbox-input"/>
+        <input type="checkbox" className="checkbox-input" defaultChecked={this.props.checked}/>
         <span className="checkbox-vis"></span>
       </div>
     );
