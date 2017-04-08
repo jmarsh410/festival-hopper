@@ -8,7 +8,9 @@ class Header extends Component {
   render() {
     return (
       <header className="header">
-        <div className="header-logo">Festival Hopper</div>
+        <Link to="/">
+          <div className="header-logo">Festival Hopper</div>
+        </Link>
         <Link to="/logout">Log out</Link>
       </header>
     );
