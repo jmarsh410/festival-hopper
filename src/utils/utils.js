@@ -1,5 +1,30 @@
 /* jshint ignore:start */
 
+function normalizeBreweryBeers(json){
+  // code for undocumented api call
+  const array = json.response.beers.items;
+
+  // code for the documented api call
+  // const array = json.response.brewery.beer_list.items;
+
+  let beers = [];
+  array.forEach(function(obj){
+    const normalizedBeer = {
+      id: obj.beer.bid,
+      name: obj.beer.beer_name,
+      brewery: obj.brewery.brewery_name,
+      image: obj.beer.beer_label,
+      description: '',
+      rating: 3,
+      isCheckedIn: false,
+      isOpen: false,
+      checked: false,
+    };
+    beers.push(normalizedBeer);
+  });
+  return beers;
+}
+
 const utils = {
   generateId(size) {
     if (typeof size !== 'number') {
@@ -13,11 +38,11 @@ const utils = {
     }
     return value;
   },
-  generateBreweryInfoUrl(breweryId){
+  generateBreweryInfoUrl(breweryId, offset = 0){
     // brewery/beer_list/BREWERY_ID
     // there is an undocumented api endpoint that the untappd website uses which can be used to get a brewery's beers
     // this endpoint is subject to removal/changes since it is undocumented
-    return 'https://api.untappd.com/v4/brewery/beer_list/' + breweryId + '?access_token=' + localStorage.userToken + '&offset=0';
+    return 'https://api.untappd.com/v4/brewery/beer_list/' + breweryId + '?access_token=' + localStorage.userToken + '&offset=' + offset;
 
     // documented api call https://untappd.com/api/docs#breweryinfo
     // return 'https://api.untappd.com/v4/brewery/info/'+ breweryId + '?access_token=' + localStorage.userToken;
@@ -25,34 +50,19 @@ const utils = {
   generateBrewerySearchUrl(breweryName){
     return 'https://api.untappd.com/v4/search/brewery/?access_token=' + localStorage.userToken + '&q=' + breweryName + '&limit=50';
   },
-  makeBreweryBeers(json, id){
-    // code for undocumented api call
-    const array = json.response.beers.items;
-
-    // code for the documented api call
-    // const array = json.response.brewery.beer_list.items;
-
-    let beers = [];
-    array.forEach(function(obj){
-      const normalizedBeer = {
-        id: obj.beer.bid,
-        name: obj.beer.beer_name,
-        brewery: obj.brewery.brewery_name,
-        image: obj.beer.beer_label,
-        rating: 3,
-        isCheckedIn: false,
-        isOpen: false,
-        checked: false,
-      };
-      beers.push(normalizedBeer);
-    });
-    // return an object with 1 key/value corresponding to the list id and its items respectively
+  normalizeBreweryBeers,
+  makeBreweryBeerList(json, id, add){
+    const beers = normalizeBreweryBeers(json);
+    // works off a previous list or creates a new one
     return {
       id: id,
-      beers: beers,
+      beers: [beers],
+      checkCount: 0,
+      maxItems: json.response.total_count,
+      beerCount: beers.length,
     };
   },
-  makeCuratedListItems(array){
+  makeCuratedList(array, id){
     let beers = [];
     array.forEach(function(beer){
       const normalizedBeer = {
@@ -63,10 +73,15 @@ const utils = {
         rating: 3,
         isCheckedIn: false,
         isOpen: false,
+        checked: false,
       };
       beers.push(normalizedBeer);
     });
-    return beers;
+    return {
+      id: id,
+      beers: beers,
+      checkCount: 0,
+    };
   },
   makeBreweryItems(json){
     // loop over each brewery and create an object for it, then return array of those objects
