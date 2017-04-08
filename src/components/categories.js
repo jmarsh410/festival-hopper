@@ -5,8 +5,6 @@ import List from './list';
 import Category from './category';
 import BrewerySearch from './brewery-search';
 import image from '../images/pbu_40_black.png';
-import Drafthouse from '../data-lists/drafthouse';
-import exampleList from '../data-lists/example-list';
 import utils from '../utils/utils';
 
 // css
@@ -18,14 +16,12 @@ const Items = [
     name: 'The Purge',
     location: 'Jered\'s House',
     img: image,
-    beers: utils.makeCuratedListItems(exampleList),
   },
   {
     id: utils.generateId(),
     name: 'Drafthouse',
     location: 'Drafthouse Pub',
     img: image,
-    beers: utils.makeCuratedListItems(Drafthouse),
   },
 ];
 
