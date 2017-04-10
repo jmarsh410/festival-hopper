@@ -70,7 +70,7 @@ class Categories extends Component {
     return (
       <div className="categories">
         <BrewerySearch onSubmit={this.handleSubmit} breweries={this.state.breweries}/>
-        <span className="categories-separator">or</span>
+        <div className="categories-separator">or</div>
         <List items={Items} type={Category} title="Curated Lists" />
       </div>
     );
