@@ -6,7 +6,7 @@
 }
 .beer-main {
   display: block;
-  padding: 10px;
+  padding: 20px;
   background-color: #ddd;
   display: flex;
   justify-content: space-between;
@@ -17,8 +17,7 @@
 .beer-image {
   width: 50px;
   height: 50px;
-  /*height: 50px;*/
-  background: #ccc;
+  background-color: #ccc;
 }
 .beer-image img {
   width: 100%;
@@ -45,7 +44,7 @@
 }
 .checkbox-vis {
   display: block;
-  background: #ccc;
+  background-color: #ccc;
   position: absolute;
   top: 0;
   left: 0;
