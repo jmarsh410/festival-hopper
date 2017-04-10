@@ -1,6 +1,6 @@
 /* jshint ignore:start */
 
-function normalizeBreweryBeers(json){
+function normalizeBreweryBeers(json, bucket = 0){
   // code for undocumented api call
   const array = json.response.beers.items;
 
@@ -8,7 +8,7 @@ function normalizeBreweryBeers(json){
   // const array = json.response.brewery.beer_list.items;
 
   let beers = [];
-  array.forEach(function(obj){
+  array.forEach(function(obj, i){
     const normalizedBeer = {
       id: obj.beer.bid,
       name: obj.beer.beer_name,
@@ -19,6 +19,8 @@ function normalizeBreweryBeers(json){
       isCheckedIn: false,
       isOpen: false,
       checked: false,
+      bucket: bucket,
+      index: i,
     };
     beers.push(normalizedBeer);
   });
@@ -51,7 +53,7 @@ const utils = {
     return 'https://api.untappd.com/v4/search/brewery/?access_token=' + localStorage.userToken + '&q=' + breweryName + '&limit=50';
   },
   normalizeBreweryBeers,
-  makeBreweryBeerList(json, id, add){
+  makeBreweryBeerList(json, id){
     const beers = normalizeBreweryBeers(json);
     // works off a previous list or creates a new one
     return {
