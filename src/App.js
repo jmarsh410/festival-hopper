@@ -9,9 +9,6 @@ import {
 import Header from './components/header';
 import Login from './components/login.js';
 import Categories from './components/categories';
-import CuratedBeerList from './components/curated-beer-list';
-import StaticBeers from './components/static-beer-list';
-import BreweryBeerList from './components/brewery-beer-list';
 import BeerListContainer from './components/beer-list-container';
 import './App.css';
 
