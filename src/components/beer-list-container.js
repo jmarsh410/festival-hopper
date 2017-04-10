@@ -6,6 +6,8 @@ import Beer from './beer';
 import List from './list';
 import utils from '../utils/utils';
 import DataLists from '../data-lists';
+import ErrorItem from './error-item';
+import LoadingSpinner from './loading-spinner';
 
 // need to make an api call to get back all the beer info for each beer id
 // beer id needs to somehow be passed to this page from whatever link was pressed on the previous page
@@ -25,6 +27,8 @@ class BeerListContainer extends Component {
     super(props);
     this.state = {
       list: { id: null, beers: null, checkCount: 0, totalCount: 0 },
+      errors: [],
+      isLoading: false,
     };
     this.handleCheckInClick = this.handleCheckInClick.bind(this);
     this.handleBeerClick = this.handleBeerClick.bind(this);
@@ -43,6 +47,23 @@ class BeerListContainer extends Component {
     }
     // add a scroll event listener
     window.addEventListener('scroll', this.handleScroll);
+  }
+  showLoadingSpinner(){
+    this.setState({ isLoading: true });
+  }
+  hideLoadingSpinner(){
+    this.setState({ isLoading: false });
+  }
+  addError(error){
+    this.setState((prevState)=>{
+      prevState.errors.push(error);
+      return { errors: prevState.errors };
+    });
+  }
+  clearErrors(){
+    this.setState({
+      errors: []
+    });
   }
   handleScroll(e){
     // if this is the bottom of the page, then see if theres more items to be loaded
@@ -63,10 +84,14 @@ class BeerListContainer extends Component {
   }
   fetchBeers(add){
     const self = this;
-    const apiOffset = add ? this.state.list.beers.length * this.defaultListSize : 0;
+    const bucketNum = add ? this.state.list.beers.length : 0;
+    const apiOffset = add ? bucketNum * this.defaultListSize : 0;
+    this.clearErrors();
+    this.showLoadingSpinner();
     fetch(this.apiEndpoint(this.listId, apiOffset))
       .then((response)=>{
         if (response.status !== 200) {
+          self.addError({ message: 'Error: Server responded with status code of ' + response.status });
           return new Error('The server responded with a status code of' + response.status);
         }
         return response.json();
@@ -74,12 +99,13 @@ class BeerListContainer extends Component {
       .then((json)=>{
         console.log(json);
         if (add) {
-          const newBeers = this.normalizeData(json);
+          const newBeers = this.normalizeData(json, bucketNum);
           this.setState((prevState)=>{
             prevState.list.beers.push(newBeers);
             prevState.list.beerCount += newBeers.length;
             return { list: prevState.list };
           });
+          self.hideLoadingSpinner();
         } else {
           const list = self.makeList(json, self.listId);
           // set the state
@@ -87,6 +113,7 @@ class BeerListContainer extends Component {
         }
       })
       .catch((err)=>{
+        self.addError({ message: err });
         console.error(err);
       });
   }
@@ -115,7 +142,9 @@ class BeerListContainer extends Component {
     const target = e.target;
     const listContainer = target.closest('.beers');
     const checkedboxes = listContainer.querySelectorAll('.checkbox input:checked');
+    let count = checkedboxes.length;
     // loop through the checked items and send a check in for each one
+    this.clearErrors();
     checkedboxes.forEach((checkbox)=>{
       const beer = checkbox.closest('.beer');
       const index = beer.getAttribute('data-index');
@@ -147,10 +176,12 @@ class BeerListContainer extends Component {
             console.error('The server responded with: ' + fetchResponse.status);
             console.error(json.meta.error_detail);
             console.error('The beer that messed up was: ' + beerName + ':' + beerId);
+            self.addError({ message: 'There was a problem checking in ' + beerName });
           } else {
             console.log('call was successful');
             // log how many api calls you have left in the hour
-            console.log('Number of requests left are: ' + fetchResponse.headers['x-ratelimit-remaining']);
+            // this stopped working for some reason
+            // console.log('Number of requests left are: ' + fetchResponse.headers['X-Ratelimit-Remaining']);
             self.setState((prevState)=>{
               prevState.list.beers[index].isCheckedIn = true;
               return { list: prevState.list };
@@ -158,6 +189,7 @@ class BeerListContainer extends Component {
           }
         })
         .catch((err)=>{
+          self.addError({ message: err });
           console.log(err);
         });
     });
@@ -173,27 +205,29 @@ class BeerListContainer extends Component {
     } else if (target.closest('.beer-main')) {
       // click came from .beer-main, so open the drawer
       const row = target.closest('.beer');
+      const bucket = row.getAttribute('data-bucket');
       const index = row.getAttribute('data-index');
       this.setState((prevState)=>{
         // reverse the openness property that is on the item 
-        prevState.list.beers[index].isOpen = prevState.list.beers[index].isOpen === true ? false : true;
+        prevState.list.beers[bucket][index].isOpen = prevState.list.beers[bucket][index].isOpen === true ? false : true;
         return { list: prevState.list };
       });
     }
   }
   handleInputChange(e){
     const target = e.target;
-    let row = target.closest('.beer');
-    let index = row.getAttribute('data-index');
+    const row = target.closest('.beer');
+    const bucket = row.getAttribute('data-bucket');
+    const index = row.getAttribute('data-index');
     if (target.classList.contains('beer-slider')) {
       this.setState((prevState)=>{
-        prevState.list.beers[index].rating = target.value;
+        prevState.list.beers[bucket][index].rating = target.value;
         return { list: prevState.list };
       });
     }
     if (target.classList.contains('beer-description')) {
       this.setState((prevState)=>{
-        prevState.list.beers[index].description = target.value;
+        prevState.list.beers[bucket][index].description = target.value;
         return { list: prevState.list };
       });
     }
@@ -204,7 +238,7 @@ class BeerListContainer extends Component {
         } else {
           --prevState.list.checkCount;
         }
-        prevState.list.beers[index].checked = target.checked;
+        prevState.list.beers[bucket][index].checked = target.checked;
         return { list: prevState.list };
       });
     }
@@ -218,7 +252,19 @@ class BeerListContainer extends Component {
     }
     let button = null;
     if (this.state.list.checkCount > 0) {
-      button = <button className="btn btn-checkIn" onClick={this.handleCheckInClick}>Check In</button>;
+      button = (
+        <button className="btn btn-checkIn" onClick={this.handleCheckInClick}>Check In</button>
+      );
+    }
+    let errors = null;
+    if (_.isArray(this.state.errors) && !_.isEmpty(this.state.errors)) {
+      errors = (
+        <List items={this.state.errors} type={ErrorItem}></List>
+      );
+    }
+    let loadingSpinner = null;
+    if (this.state.isLoading) {
+      loadingSpinner = (<LoadingSpinner/>);
     }
     if (!_.isArray(this.state.list.beers)) {
       return (
@@ -227,8 +273,10 @@ class BeerListContainer extends Component {
     }
     return (
       <div className="beers">
+        {errors}
         <List items={this.state.list.beers} type={Beer} onClick={this.handleBeerClick} onChange={this.handleInputChange}/>
         {button}
+        {loadingSpinner}
       </div>
     )
   }
