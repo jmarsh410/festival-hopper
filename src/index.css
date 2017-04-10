@@ -1,3 +1,14 @@
+:root {
+  --dark-green: #282b28;
+  --green: #3e5641;
+  --light-green: #99c24d;
+  --positive: #0b3954;
+  --negative: #c3423f;
+}
+
+html {
+  background-color: var(--light-green);
+}
 body {
   margin: 0;
   padding: 0;
