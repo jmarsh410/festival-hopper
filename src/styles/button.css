@@ -4,6 +4,7 @@
   color: white;
   background-color: black;
   text-decoration: none;
+  border: none;
 }
 .btn--block {
   display: block;
@@ -15,7 +16,7 @@
   right: 0;
   margin: auto;
   width: 100px;
-  background-color: green;
+  background-color: var(--positive);
   border-radius: 5px;
   color: white;
 }
