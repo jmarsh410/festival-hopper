@@ -15,6 +15,8 @@ class Beer extends Component {
     const description = this.props.data.description;
     const isCheckedIn = this.props.data.isCheckedIn;
     const isOpen = this.props.data.isOpen;
+    const bucket = this.props.data.bucket;
+    const index = this.props.data.index;
     let classes = 'beer';
     if (isCheckedIn) {
       classes += ' checkedIn';
@@ -23,7 +25,7 @@ class Beer extends Component {
       classes += ' open';
     }
     return (
-      <div className={classes} data-id={id} data-name={name} data-index={this.props.index}>
+      <div className={classes} data-id={id} data-name={name} data-bucket={bucket} data-index={index}>
         <div className="beer-main">
           <div className="beer-image">
             <img src={image} alt={name}/>
