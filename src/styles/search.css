@@ -4,7 +4,7 @@
 .search-field {
   flex: 1;
   padding: 10px;
-}
-.search-btn {
-  margin-left: 10px;
+  box-shadow: none;
+  border-radius: 0;
+  border: none;
 }
