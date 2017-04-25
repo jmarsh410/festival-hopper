@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import '../styles/category.css';
 
 class Brewery extends Component {
   render(){
@@ -12,12 +13,12 @@ class Brewery extends Component {
     return (
       <Link to={{
         pathname: 'brewery/' + id,
-      }} className="brewery">
-        <div className="brewery-image">
+      }} className="category">
+        <div className="category-image">
           <img src={image} alt={name} />
         </div>
-        <div className="brewery-info">
-          <div className="brewery-name">{name}</div>
+        <div className="category-info">
+          <div className="category-name">{name}</div>
         </div>
       </Link>
     );
