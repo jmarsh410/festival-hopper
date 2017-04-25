@@ -6,12 +6,9 @@ import Beer from './beer';
 import List from './list';
 import utils from '../utils/utils';
 import DataLists from '../data-lists';
-import ErrorItem from './error-item';
 import LoadingSpinner from './loading-spinner';
-
-// need to make an api call to get back all the beer info for each beer id
-// beer id needs to somehow be passed to this page from whatever link was pressed on the previous page
-const checkInEndpoint = 'https://api.untappd.com/v4/checkin/add?access_token=' + localStorage.userToken;
+import Modal from './modal';
+import Notification from './notification';
 
 // storage for 
 const apiCallInfo = {
@@ -29,17 +26,21 @@ class BeerListContainer extends Component {
       list: { id: null, beers: null, checkCount: 0, totalCount: 0 },
       errors: [],
       isLoading: false,
+      notifications: [],
+      waiting: false,
     };
     this.handleCheckInClick = this.handleCheckInClick.bind(this);
     this.handleBeerClick = this.handleBeerClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
+    this.handleModalClick = this.handleModalClick.bind(this);
 
     this.defaultListSize = 25;
     this.maxItems = null;
     this.listId = this.props.match.params.listId;
     this.listType = this.props.location.pathname.split('/')[1];
     if (this.listType !== 'curated') {
+      this.isAsync = true;
       this.needsFetch = true;
       this.apiEndpoint = apiCallInfo[this.listType].endpoint;
       this.normalizeData = apiCallInfo[this.listType].normalizeData;  
@@ -54,15 +55,24 @@ class BeerListContainer extends Component {
   hideLoadingSpinner(){
     this.setState({ isLoading: false });
   }
-  addError(error){
+  showModalSpinner(){
+    this.setState({ waiting: true });
+  }
+  hideModalSpinner(){
+    this.setState({ waiting: false });
+  }
+  addNotification(error){
     this.setState((prevState)=>{
-      prevState.errors.push(error);
-      return { errors: prevState.errors };
+      prevState.notifications.push(error);
+      return { notifications: prevState.notifications };
+      // prevState.errors.push(error);
+      // return { errors: prevState.errors };
     });
   }
-  clearErrors(){
+  clearNotifications(){
     this.setState({
-      errors: []
+      notifications: []
+      // errors: []
     });
   }
   handleScroll(e){
@@ -86,12 +96,12 @@ class BeerListContainer extends Component {
     const self = this;
     const bucketNum = add ? this.state.list.beers.length : 0;
     const apiOffset = add ? bucketNum * this.defaultListSize : 0;
-    this.clearErrors();
+    this.clearNotifications();
     this.showLoadingSpinner();
     fetch(this.apiEndpoint(this.listId, apiOffset))
       .then((response)=>{
         if (response.status !== 200) {
-          self.addError({ message: 'Error: Server responded with status code of ' + response.status });
+          self.addNotification({ id: utils.generateId(), text: 'Error: Server responded with status code of ' + response.status, type: 'error' });
           return new Error('The server responded with a status code of' + response.status);
         }
         return response.json();
@@ -113,7 +123,7 @@ class BeerListContainer extends Component {
         }
       })
       .catch((err)=>{
-        self.addError({ message: err });
+        self.addNotification({ id: utils.generateId(), text: err, type: 'error' });
         console.error(err);
       });
   }
@@ -136,17 +146,35 @@ class BeerListContainer extends Component {
       }
     }
   }
+  handleModalClick(e) {
+    this.setState({
+      notifications: [],
+    });
+  }
   handleCheckInClick(e) {
     const self = this;
-    // the button
     const target = e.target;
     const listContainer = target.closest('.beers');
-    const checkedboxes = listContainer.querySelectorAll('.checkbox input:checked');
+    // set the loader
+    const checkedboxes = listContainer.querySelectorAll('.beer:not(.checkedIn) .checkbox input:checked');
     let count = checkedboxes.length;
+    self.showModalSpinner();
+    const done = function(){
+      // get rid of the spinner
+      self.hideModalSpinner();
+    };
+    const next = function(){
+      --count;
+      if (count === 0) {
+        done();
+      }
+    };
+    // get the beers that are checked, but HAVENT been checked in yet
     // loop through the checked items and send a check in for each one
-    this.clearErrors();
+    this.clearNotifications();
     checkedboxes.forEach((checkbox)=>{
       const beer = checkbox.closest('.beer');
+      const bucket = beer.getAttribute('data-bucket');
       const index = beer.getAttribute('data-index');
       // make sure to multiply by -1. because the offset is positive if it is behind and vice versa
       const timezoneOffset = ((new Date().getTimezoneOffset() / 60) * -1) + ''; // make it a string
@@ -166,36 +194,45 @@ class BeerListContainer extends Component {
         body: formData,
       }
       let fetchResponse;
-      fetch(checkInEndpoint, fetchOpts)
+      fetch(utils.generateCheckInUrl(), fetchOpts)
         .then((response)=>{
           fetchResponse = response;
           return response.json();
         })
         .then((json)=>{
+          console.log(json);
           if (fetchResponse.status !== 200) {
             console.error('The server responded with: ' + fetchResponse.status);
             console.error(json.meta.error_detail);
             console.error('The beer that messed up was: ' + beerName + ':' + beerId);
-            self.addError({ message: 'There was a problem checking in ' + beerName });
+            self.addNotification({ id: utils.generateId(), text: 'There was a problem checking in ' + beerName + '. ' + json.meta.error_detail, type: 'error' });
           } else {
-            console.log('call was successful');
             // log how many api calls you have left in the hour
             // this stopped working for some reason
             // console.log('Number of requests left are: ' + fetchResponse.headers['X-Ratelimit-Remaining']);
             self.setState((prevState)=>{
-              prevState.list.beers[index].isCheckedIn = true;
-              return { list: prevState.list };
+              prevState.list.beers[bucket][index].isCheckedIn = true;
+              // clear out the check count
+              prevState.list.checkCount = 0;
+              prevState.notifications.push({ id: utils.generateId(), text: 'call was successful', type: 'generic' });
+              return {
+                list: prevState.list,
+                notifications: prevState.notifications,
+              };
             });
           }
+          next();
         })
         .catch((err)=>{
-          self.addError({ message: err });
+          self.addNotification({ id: utils.generateId(), text: err, type: 'error' });
           console.log(err);
+          next();
         });
     });
   }
   handleBeerClick(e) {
     const target = e.target;
+    // don't do anything if the beer has already been checkedIn
     if (target.closest('.beer.checkedIn')){
       e.preventDefault();
       return;
@@ -216,6 +253,11 @@ class BeerListContainer extends Component {
   }
   handleInputChange(e){
     const target = e.target;
+    // don't do anything if the beer has already been checkedIn
+    if (target.closest('.beer.checkedIn')){
+      e.preventDefault();
+      return;
+    }
     const row = target.closest('.beer');
     const bucket = row.getAttribute('data-bucket');
     const index = row.getAttribute('data-index');
@@ -253,30 +295,41 @@ class BeerListContainer extends Component {
     let button = null;
     if (this.state.list.checkCount > 0) {
       button = (
-        <button className="btn btn-checkIn" onClick={this.handleCheckInClick}>Check In</button>
+        <button className="btn btn-checkIn" onClick={this.handleCheckInClick}>Check In: {this.state.list.checkCount}</button>
       );
     }
-    let errors = null;
-    if (_.isArray(this.state.errors) && !_.isEmpty(this.state.errors)) {
-      errors = (
-        <List items={this.state.errors} type={ErrorItem}></List>
+    let waiting = null;
+    if (_.isBoolean(this.state.waiting) && this.state.waiting) {
+      waiting = (
+        <Modal>
+          <LoadingSpinner/>
+        </Modal>
       );
     }
     let loadingSpinner = null;
     if (this.state.isLoading) {
       loadingSpinner = (<LoadingSpinner/>);
     }
+    let modal = null;
+    if (_.isArray(this.state.notifications) && !_.isEmpty(this.state.notifications)) {
+      modal = (
+        <Modal onCloseClick={this.handleModalClick} close={true}>
+          <List type={Notification} items={this.state.notifications}/>
+        </Modal>
+      );
+    }
     if (!_.isArray(this.state.list.beers)) {
       return (
-        <div>'loading...'</div>
+        <LoadingSpinner/>
       );
     }
     return (
       <div className="beers">
-        {errors}
         <List items={this.state.list.beers} type={Beer} onClick={this.handleBeerClick} onChange={this.handleInputChange}/>
-        {button}
         {loadingSpinner}
+        {button}
+        {modal}
+        {waiting}
       </div>
     )
   }
