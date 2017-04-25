@@ -40,6 +40,10 @@ const utils = {
     }
     return value;
   },
+  generateCheckInUrl(){
+    return 'https://api.untappd.com/v4/checkin/add?access_token=' + localStorage.userToken;
+  },
+  // lists the beers that a brewery has
   generateBreweryInfoUrl(breweryId, offset = 0){
     // brewery/beer_list/BREWERY_ID
     // there is an undocumented api endpoint that the untappd website uses which can be used to get a brewery's beers
@@ -49,6 +53,7 @@ const utils = {
     // documented api call https://untappd.com/api/docs#breweryinfo
     // return 'https://api.untappd.com/v4/brewery/info/'+ breweryId + '?access_token=' + localStorage.userToken;
   },
+  // lists breweries that match the search term
   generateBrewerySearchUrl(breweryName){
     return 'https://api.untappd.com/v4/search/brewery/?access_token=' + localStorage.userToken + '&q=' + breweryName + '&limit=50';
   },
@@ -66,7 +71,7 @@ const utils = {
   },
   makeCuratedList(array, id){
     let beers = [];
-    array.forEach(function(beer){
+    array.forEach(function(beer, i){
       const normalizedBeer = {
         id: beer.bid,
         name: beer.beer_name,
@@ -76,12 +81,14 @@ const utils = {
         isCheckedIn: false,
         isOpen: false,
         checked: false,
+        bucket: 0, // curated lists have only 1 bucket and will always have a bucket value of 0
+        index: i,
       };
       beers.push(normalizedBeer);
     });
     return {
       id: id,
-      beers: beers,
+      beers: [beers],
       checkCount: 0,
     };
   },
