@@ -4,11 +4,24 @@
   color: white;
   background-color: var(--dark-green);
   display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 .header a {
   text-decoration: none;
+  color: white;
+}
+.header a:visited {
+  color: white;
 }
 .header-logo {
+  font-size: var(--fs-l);
+}
+.header-logout {
+  color: white;
+}
+.header-logout:visited,
+.header-logout:active,
+.header-logout:focus {
   color: white;
 }

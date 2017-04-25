@@ -5,18 +5,28 @@
   background-color: black;
   text-decoration: none;
   border: none;
+  box-shadow: none;
+  border-radius: 0px;
 }
 .btn--block {
   display: block;
 }
+.btn--positive {
+  background-color: var(--positive);
+}
+.btn--connect {
+  text-transform: uppercase;
+}
 .btn-checkIn {
   position: fixed;
-  bottom: 5px;
+  bottom: 15px;
   left: 0;
   right: 0;
   margin: auto;
   width: 100px;
   background-color: var(--positive);
-  border-radius: 5px;
+  border-radius: 20px;
   color: white;
+  box-shadow: 0 0 10px 0 var(--positive);
+  border: 1px solid var(--positive);
 }

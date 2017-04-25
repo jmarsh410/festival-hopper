@@ -1,8 +1,11 @@
 .beers {
   margin-bottom: 100px;
 }
-.beer.checkedIn {
+/*.beer.checkedIn {
   opacity: .5;
+}*/
+.beer {
+  background-color: var(--gray);
 }
 .beer-main {
   display: block;
@@ -24,7 +27,7 @@
 }
 .beer-info {
   flex: 1;
-  margin-left: 10px;
+  margin: 0 10px;
 }
 /*move this into a separate module*/
 .beer-checkbox {
@@ -71,6 +74,16 @@
 }
 .checkbox-input:checked + .checkbox-vis:before {
   opacity: 1;
+}
+.checkedIn .checkbox-vis {
+  background-color: transparent;
+}
+.checkedIn .checkbox-input:checked + .checkbox-vis:before {
+  border-width: 4px;
+  border-radius: 50%;
+  width: 12px;
+  border-color: var(--light-green);
+  transform: translateY(0px);
 }
 .beer-drawer {
   overflow:hidden;
