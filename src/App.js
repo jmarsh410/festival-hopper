@@ -15,8 +15,8 @@ import './App.css';
 const urlParameter = '#access_token=';
 // const client_id = 'B37286DA6E41C3C75634F4C0DB726E889052525C';
 // const client_secret = '8E445ABC27BC99A5D67CBB98AEAA2E936E02AE28';
-// const myToken = 'C7F4D6FC366C137FF46878BABCCEBCF6B85FBA35';
-// http://REDIRECT_URL#access_token=C7F4D6FC366C137FF46878BABCCEBCF6B85FBA35
+// const myToken = '336DB8FB0FDED71D92E55514EFD2132931270D40';
+// http://REDIRECT_URL#access_token=336DB8FB0FDED71D92E55514EFD2132931270D40
 
 // test account user token
 // #access_token=336DB8FB0FDED71D92E55514EFD2132931270D40
@@ -44,17 +44,19 @@ class App extends Component {
       <Router>
         <div>
           <Header />
-          <Route exact path="/" render={()=> {
-            return this.authenticate() ? (<Categories/>) : (<Redirect to="/login"/>);
-          }}/>
-          <Route path="/logout" render={()=>{
-            // delete the user token from local storage
-            localStorage.removeItem('userToken');
-            return (<Redirect to="/"/>);
-          }}/>
-          <Route path="/curated/:listId" component={BeerListContainer}/>
-          <Route path="/brewery/:listId" component={BeerListContainer}/>
-          <Route path="/login" component={Login}/>
+          <main>
+            <Route exact path="/" render={()=> {
+              return this.authenticate() ? (<Categories/>) : (<Redirect to="/login"/>);
+            }}/>
+            <Route path="/logout" render={()=>{
+              // delete the user token from local storage
+              localStorage.clear();
+              return (<Redirect to="/"/>);
+            }}/>
+            <Route path="/curated/:listId" component={BeerListContainer}/>
+            <Route path="/brewery/:listId" component={BeerListContainer}/>
+            <Route path="/login" component={Login}/>
+          </main>
         </div>
       </Router>
     );
