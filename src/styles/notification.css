@@ -1,0 +1,7 @@
+.notification {
+  display: block;
+  padding: 10px;
+}
+.notification.error {
+  background-color: var(--negative);
+}
