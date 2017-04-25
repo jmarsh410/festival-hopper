@@ -11,7 +11,7 @@ class Header extends Component {
         <Link to="/">
           <div className="header-logo">Festival Hopper</div>
         </Link>
-        <Link to="/logout">Log out</Link>
+        <Link to="/logout" className="header-logout">Log out</Link>
       </header>
     );
   }
