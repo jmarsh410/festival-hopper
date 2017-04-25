@@ -115,12 +115,12 @@ class BeerListContainer extends Component {
             prevState.list.beerCount += newBeers.length;
             return { list: prevState.list };
           });
-          self.hideLoadingSpinner();
         } else {
           const list = self.makeList(json, self.listId);
           // set the state
           self.updateList(list);
         }
+        self.hideLoadingSpinner();
       })
       .catch((err)=>{
         self.addNotification({ id: utils.generateId(), text: err, type: 'error' });
