@@ -27,7 +27,7 @@ const Items = [
 class Categories extends Component {
   render() {
     return (
-      <div centered={true}>
+      <div className="categories">
         <List items={Items} type={Category} title="Curated Lists" />
       </div>
     );
