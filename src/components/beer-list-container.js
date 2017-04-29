@@ -46,8 +46,6 @@ class BeerListContainer extends Component {
       this.normalizeData = apiCallInfo[this.listType].normalizeData;  
       this.makeList = apiCallInfo[this.listType].makeList;  
     }
-    // add a scroll event listener
-    window.addEventListener('scroll', this.handleScroll);
   }
   showLoadingSpinner(){
     this.setState({ isLoading: true });
@@ -286,7 +284,13 @@ class BeerListContainer extends Component {
     }
   }
   componentWillMount(){
+    // add a scroll event listener
+    window.addEventListener('scroll', this.handleScroll);
     this.getInitialBeers();
+  }
+  componentWillUnmount(){
+    // add a scroll event listener
+    window.removeEventListener('scroll', this.handleScroll);
   }
   render(){
     if (this.state.list.beers !== null){
