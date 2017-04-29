@@ -7,8 +7,10 @@ import {
   Redirect
 } from 'react-router-dom';
 import Header from './components/header';
+import Nav from './components/nav';
 import Login from './components/login.js';
 import Categories from './components/categories';
+import BrewerySearch from './components/brewery-search';
 import BeerListContainer from './components/beer-list-container';
 import './App.css';
 
@@ -44,16 +46,22 @@ class App extends Component {
       <Router>
         <div>
           <Header />
+          <Route path="/" children={(props)=>{
+            // used the children render method because it always gets called regardless of current route/location
+            return props.location.pathname !== '/login' ? (<Nav/>) : null; 
+          }}/>
           <main>
             <Route exact path="/" render={()=> {
-              return this.authenticate() ? (<Categories/>) : (<Redirect to="/login"/>);
+              return this.authenticate() ? (<Redirect to="/curated"/>) : (<Redirect to="/login"/>);
             }}/>
             <Route path="/logout" render={()=>{
               // delete the user token from local storage
               localStorage.clear();
               return (<Redirect to="/"/>);
             }}/>
+            <Route exact path="/curated" component={Categories}/>
             <Route path="/curated/:listId" component={BeerListContainer}/>
+            <Route exact path="/brewery-search" component={BrewerySearch}/>
             <Route path="/brewery/:listId" component={BeerListContainer}/>
             <Route path="/login" component={Login}/>
           </main>
