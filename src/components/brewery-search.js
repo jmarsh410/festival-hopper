@@ -16,7 +16,7 @@ class BrewerySearch extends Component {
     super(props);
     this.state = {
       breweries: null,
-      waiting: true,
+      waiting: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
