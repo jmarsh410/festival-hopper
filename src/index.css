@@ -14,11 +14,11 @@
   --light-gray: #ddd;
 
   --fs-base: 14px;
-
   --fs-l: 2em;
   --fs-m: 1.5em;
   --fs-s: var(--fs-base);
 
+  --text-light: #fff;
   --text-dark: var(--dark);
 }
 html {
@@ -29,6 +29,11 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+input[type='text'],
+input[type='number'],
+textarea {
+  font-size: 16px;
 }
 @media screen and (min-width: 700px) {
   main {
