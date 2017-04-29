@@ -1,0 +1,22 @@
+.nav ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.nav li:not(:last-child) {
+  border-right: 1px solid var(--dark);
+}
+.nav li {
+  padding: 20px;
+  flex: 1;
+  text-align: center;
+  background: var(--medium);
+}
+.nav a {
+  color: var(--text-light);
+  text-decoration: none;
+}
+.nav a.selected {
+  text-decoration: underline;
+}
