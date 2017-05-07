@@ -12,14 +12,8 @@ import '../styles/categories.css';
 const Items = [
   {
     id: utils.generateId(),
-    name: 'The Purge',
-    location: 'Jered\'s House',
-    img: image,
-  },
-  {
-    id: utils.generateId(),
-    name: 'Drafthouse',
-    location: 'Drafthouse Pub',
+    name: 'ABW-6th-Anniversary',
+    location: 'Austin Beerworks',
     img: image,
   },
 ];
