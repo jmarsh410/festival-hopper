@@ -1,8 +1,6 @@
-import drafthouse from './drafthouse';
-import thePurge from './the-purge';
+import abw6th from './abw6th';
 // key names must match the corresponding :listId url parameter
 const DataLists = {
-  'drafthouse': drafthouse,
-  'the-purge': thePurge,
+  'abw-6th-anniversary': abw6th,
 };
 export default DataLists;
