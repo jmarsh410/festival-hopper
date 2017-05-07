@@ -293,15 +293,18 @@ class BeerListContainer extends Component {
     window.removeEventListener('scroll', this.handleScroll);
   }
   render(){
+    // update the beer list on localStorage each time the state changes
     if (this.state.list.beers !== null){
       this.updateStorage(this.state.list);
     }
+    // show the 'check-in' button if some of the beers are checkec
     let button = null;
     if (this.state.list.checkCount > 0) {
       button = (
         <button className="btn btn-checkIn" onClick={this.handleCheckInClick}>Check In: {this.state.list.checkCount}</button>
       );
     }
+    // waiting for beer check-ins to respond, show modal with loading spinner
     let waiting = null;
     if (_.isBoolean(this.state.waiting) && this.state.waiting) {
       waiting = (
@@ -310,10 +313,12 @@ class BeerListContainer extends Component {
         </Modal>
       );
     }
+    // waiting to load more beers, show loading spinner
     let loadingSpinner = null;
     if (this.state.isLoading) {
       loadingSpinner = (<LoadingSpinner/>);
     }
+    // if there are notifications, show them in a modal
     let modal = null;
     if (_.isArray(this.state.notifications) && !_.isEmpty(this.state.notifications)) {
       modal = (
@@ -322,6 +327,7 @@ class BeerListContainer extends Component {
         </Modal>
       );
     }
+    // waiting for beer list to generate, show loading spinner
     if (!_.isArray(this.state.list.beers)) {
       return (
         <LoadingSpinner/>
