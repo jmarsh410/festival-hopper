@@ -9,6 +9,7 @@ import DataLists from '../data-lists';
 import LoadingSpinner from './loading-spinner';
 import Modal from './modal';
 import Notification from './notification';
+import Search from './search';
 
 // storage for 
 const apiCallInfo = {
@@ -28,12 +29,14 @@ class BeerListContainer extends Component {
       isLoading: false,
       notifications: [],
       waiting: false,
+      searchField: null,
     };
     this.handleCheckInClick = this.handleCheckInClick.bind(this);
     this.handleBeerClick = this.handleBeerClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.handleModalClick = this.handleModalClick.bind(this);
+    this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
 
     this.defaultListSize = 25;
     this.maxItems = null;
@@ -92,6 +95,7 @@ class BeerListContainer extends Component {
   }
   fetchBeers(add){
     const self = this;
+    // this.state.list.beers is an array of arrays
     const bucketNum = add ? this.state.list.beers.length : 0;
     const apiOffset = add ? bucketNum * this.defaultListSize : 0;
     this.clearNotifications();
@@ -283,6 +287,14 @@ class BeerListContainer extends Component {
       });
     }
   }
+  handleSearchSubmit(e){
+    e.preventDefault();
+    // form element
+    const searchTerm = e.target.querySelector('.search-field').value.toLowerCase().replace(' ', '');
+    this.setState({
+      searchField: searchTerm,
+    });
+  }
   componentWillMount(){
     // add a scroll event listener
     window.addEventListener('scroll', this.handleScroll);
@@ -293,9 +305,19 @@ class BeerListContainer extends Component {
     window.removeEventListener('scroll', this.handleScroll);
   }
   render(){
+    const self = this;
     // update the beer list on localStorage each time the state changes
     if (this.state.list.beers !== null){
       this.updateStorage(this.state.list);
+    }
+    // filter the list based on current filters
+    let filteredBuckets = this.state.list.beers;
+    if (_.isString(this.state.searchField) && this.state.searchField.length > 0) {
+      filteredBuckets = filteredBuckets.map((beerArray) => {
+        return beerArray.filter((beer) => {
+          return beer.name.toLowerCase().replace(' ', '').includes(self.state.searchField) ? true : false;
+        });
+      });
     }
     // show the 'check-in' button if some of the beers are checkec
     let button = null;
@@ -335,7 +357,8 @@ class BeerListContainer extends Component {
     }
     return (
       <div className="beers">
-        <List items={this.state.list.beers} type={Beer} onClick={this.handleBeerClick} onChange={this.handleInputChange}/>
+        <Search inputName="beer-search" placeholder="Search list" handleSubmit={this.handleSearchSubmit}/>
+        <List items={filteredBuckets} type={Beer} onClick={this.handleBeerClick} onChange={this.handleInputChange}/>
         {loadingSpinner}
         {button}
         {modal}
