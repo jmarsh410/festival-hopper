@@ -8,7 +8,7 @@ class List extends Component {
   render() {
     const Type = this.props.type;
     const flatItems = _.flatten(this.props.items); // flatten the items a single level
-    const deDupeItems = _.uniqBy(flatItems, 'id'); // re=move duplicate beers
+    const deDupeItems = _.uniqBy(flatItems, 'id'); // remove duplicate beers
     const html = deDupeItems.map((item, i) => {
       // if the item doesn't have an id property, then default to showing the array index
       const key = item.id ? item.id : i;
