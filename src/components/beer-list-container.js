@@ -10,6 +10,7 @@ import LoadingSpinner from './loading-spinner';
 import Modal from './modal';
 import Notification from './notification';
 import Search from './search';
+import Select from './select';
 
 // storage for 
 const apiCallInfo = {
@@ -19,6 +20,11 @@ const apiCallInfo = {
     makeList: utils.makeBreweryBeerList,
   }
 };
+
+const searchTerms = {
+  brewery: 'brewery',
+  'a-z': 'name',
+}
 
 class BeerListContainer extends Component {
   constructor(props){
@@ -30,6 +36,7 @@ class BeerListContainer extends Component {
       notifications: [],
       waiting: false,
       searchField: null,
+      sortField: 'brewery',
     };
     this.handleCheckInClick = this.handleCheckInClick.bind(this);
     this.handleBeerClick = this.handleBeerClick.bind(this);
@@ -37,6 +44,7 @@ class BeerListContainer extends Component {
     this.handleScroll = this.handleScroll.bind(this);
     this.handleModalClick = this.handleModalClick.bind(this);
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
+    this.handleSortChange = this.handleSortChange.bind(this);
 
     this.defaultListSize = 25;
     this.maxItems = null;
@@ -66,14 +74,11 @@ class BeerListContainer extends Component {
     this.setState((prevState)=>{
       prevState.notifications.push(error);
       return { notifications: prevState.notifications };
-      // prevState.errors.push(error);
-      // return { errors: prevState.errors };
     });
   }
   clearNotifications(){
     this.setState({
       notifications: []
-      // errors: []
     });
   }
   handleScroll(e){
@@ -295,6 +300,29 @@ class BeerListContainer extends Component {
       searchField: searchTerm,
     });
   }
+  handleSortChange(e){
+    const value = e.target.value;
+    console.log(value);
+    this.setState({
+      sortField: value,
+    });
+  }
+  getFilteredItems(){
+    // filter the list based on current 'search' and 'sort' fields
+    let beers = _.flatten(this.state.list.beers);
+    // filter by search terms
+    if (_.isString(this.state.searchField) && this.state.searchField.length > 0) {
+      beers = beers.filter((beer) => {
+        return beer.name.toLowerCase().replace(' ', '').includes(self.state.searchField) ? true : false;
+      });
+    }
+    // filter by sort term
+    if (_.isString(this.state.sortField) && this.state.sortField.length > 0) {
+      const term = searchTerms[this.state.sortField.toLowerCase()];
+      beers = _.sortBy(beers, [term]);
+    }
+    return beers;
+  }
   componentWillMount(){
     // add a scroll event listener
     window.addEventListener('scroll', this.handleScroll);
@@ -309,15 +337,6 @@ class BeerListContainer extends Component {
     // update the beer list on localStorage each time the state changes
     if (this.state.list.beers !== null){
       this.updateStorage(this.state.list);
-    }
-    // filter the list based on current filters
-    let filteredBuckets = this.state.list.beers;
-    if (_.isString(this.state.searchField) && this.state.searchField.length > 0) {
-      filteredBuckets = filteredBuckets.map((beerArray) => {
-        return beerArray.filter((beer) => {
-          return beer.name.toLowerCase().replace(' ', '').includes(self.state.searchField) ? true : false;
-        });
-      });
     }
     // show the 'check-in' button if some of the beers are checkec
     let button = null;
@@ -357,8 +376,11 @@ class BeerListContainer extends Component {
     }
     return (
       <div className="beers">
-        <Search inputName="beer-search" placeholder="Search list" handleSubmit={this.handleSearchSubmit}/>
-        <List items={filteredBuckets} type={Beer} onClick={this.handleBeerClick} onChange={this.handleInputChange}/>
+        <div className="list-controls">
+          <Search inputName="beer-search" placeholder="Search list" handleSubmit={this.handleSearchSubmit}/>
+          <Select id="beers-sort" label="Sort By:" options={['Brewery', 'A-Z']} handleChange={this.handleSortChange}/>
+        </div>
+        <List items={this.getFilteredItems()} type={Beer} onClick={this.handleBeerClick} onChange={this.handleInputChange}/>
         {loadingSpinner}
         {button}
         {modal}
