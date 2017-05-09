@@ -16,6 +16,12 @@ const Items = [
     location: 'Austin Beerworks',
     img: image,
   },
+  {
+    id: utils.generateId(),
+    name: 'Index Fest',
+    location: 'Austin Statesman',
+    img: image,
+  },
 ];
 
 class Categories extends Component {
