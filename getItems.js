@@ -10,7 +10,9 @@ const clientSecret = '8E445ABC27BC99A5D67CBB98AEAA2E936E02AE28';
 const fileName = process.argv[2];
 const variableName = fileName[0].toUpperCase() + fileName.substring(1);
 const writePath = './src/data-lists/' + fileName + '.js';
-const array = [36933, 5738, 85228, 1853776, 1706096];
+const array = [
+  189422,  //Einhorn,
+];
 
 function renderFileContents(data){
   return `
@@ -43,6 +45,7 @@ function getItems(array){
   };
   array.forEach(function(beerId){
     const apiPath = 'https://api.untappd.com/v4/beer/info/' + beerId + '?client_id=' + clientId + '&client_secret=' + clientSecret;
+    // const apiPath = 'https://api.untappd.com/v4/beer/info/' + beerId + '?access_token=B37286DA6E41C3C75634F4C0DB726E889052525C';
     https.get(apiPath, (res)=>{
       // log number of requests left
       console.log('Number of requests left are: ' + res.headers['x-ratelimit-remaining']);
@@ -58,6 +61,7 @@ function getItems(array){
       });
     }).on('error', (err)=>{
       console.error(err);
+      next();
     });
   });
 }
