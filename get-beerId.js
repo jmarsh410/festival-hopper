@@ -7,29 +7,22 @@ const https = require('https');
 
 const clientId = 'B37286DA6E41C3C75634F4C0DB726E889052525C';
 const clientSecret = '8E445ABC27BC99A5D67CBB98AEAA2E936E02AE28';
-const fileName = process.argv[2];
+const fileName = process.argv[2] || '';
 const writePath = './beerIds/' + fileName + '.js';
 const array = [
-  'ACTION! ALE',
-  'Black Thunder',
-  'Bloodwork Orange',
-  'Fire Eagle',
-  'Peacemaker',
-  'Pearl-Snap',
-  'Heisenberg',
-  'Sputnik',
-  'El Sputniko',
-  'Choco Leche',
-  'Frankie',
-  'French Bully',
-  'Heavy Machinery',
-  'Midnight Swordfight',
-  'Templar Nights',
-  'Finkle (H)',
-  'Finkle (P)',
-  'Finkle (A)',
-  'Finkle (R)',
-  'Finkle (SP)'
+  'Stone Tangerine Express',
+  'Stone Jindia Pale Ale',
+  'Stone Dayslayer',
+  'Stone 2015 Double Bastard',
+  'Sweetwater 420 Extra Pale Ale',
+  'Sweetwater Goin\' Coastal Pineapple IPA',
+  'Sweetwater Cool Breeze Cucumber Saison',
+  'Sweetwater Sweetwater IPA',
+  'Sweetwater Pulled Porter Smoked Bacon Porter',
+  'Thirsty Planet Thirsty Goat',
+  'Thirsty Planet Bucket Head',
+  'Thirsty Planet ChiGoatle',
+  'Treaty Oak Lil Hop IPA'
 ];
 
 function renderFileContents(data){
@@ -48,6 +41,9 @@ function writeFile(template){
 }
 
 function getBeerIds(array){
+  if (fileName.length === 0) {
+    return console.error('no file name was specified');
+  }
   let beerIds = [];
   let queue = array.length;
   const done = function(){
@@ -78,8 +74,19 @@ function getBeerIds(array){
           console.log(errorMessage);
           return;
         }
+        const beersObj = JSON.parse(data).response.beers;
+        let bidNum = '';
+        let apiName = '';
+        // no beers were returned
+        if (beersObj.count === 0) {
+          console.error('error getting ' + beerName + '. status code ' + res.statusCode);
+          bidNum = 'ERROR';
+        } else {
+          bidNum = beersObj.items[0].beer.bid;
+          apiName = beersObj.items[0].beer.beer_name;
+        }
         // add in a new line for prettier printing in the file
-        const beerId = '\n' + JSON.parse(data).response.beers.items[0].beer.bid + ',  //' + beerName;
+        const beerId = '\n' + bidNum + ',  //' + beerName + '. api returned ' + apiName;
         beerIds.push(beerId);
         next();
       });
