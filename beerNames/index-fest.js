@@ -1,3 +1,4 @@
+// index1
 [
 'Revolver Anodyne',
 'Revolver The Mandarin',
@@ -29,6 +30,7 @@
 'Stone Ripper',
 ]
 
+// index2
 [
 'Stone Tangerine Express',
 'Stone Jindia Pale Ale',
@@ -42,7 +44,11 @@
 'Thirsty Planet Thirsty Goat',
 'Thirsty Planet Bucket Head',
 'Thirsty Planet ChiGoatle',
-'Treaty Oak Lil Hop IPA',
+'Treaty Oak Lil Hop IPA'
+]
+
+// index3
+[
 'Treaty Oak Brightside Blonde',
 'Treaty Oak Fitzhugh Mild',
 'Twisted X Hy-Biscus',
