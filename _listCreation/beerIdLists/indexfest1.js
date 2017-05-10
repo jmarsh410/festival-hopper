@@ -2,9 +2,9 @@
 1367875,  //Revolver The Mandarin,
 1560810,  //Saint Arnold Raspberry AF,
 2050573,  //Schilling Emerald City; Blackberry Pear,
-ERROR,  //Sam Adams Wild Child American Sour,
+2032144,  //Sam Adams Wild Child American Sour,
 2057859,  //Schilling Passport: Passionfruit Pineapple,
-ERROR,  //Shiner Homespun Cream Ale,
+1720311,  //Shiner Homespun Cream Ale,
 1876872,  //Shiner Berliner Weiss,
 39912,  //Shiner Shiner Light Blonde,
 841832,  //Revolver Sangre Y Miel,
@@ -26,5 +26,5 @@ ERROR,  //Shiner Homespun Cream Ale,
 263666,  //Sierra Nevada Narwhal,
 1415165,  //South Austin ,
 1415165,  //South Austin ,
-1415165,  //South Austin 
+1415165  //South Austin 
 ]

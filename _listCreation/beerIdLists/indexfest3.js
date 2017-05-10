@@ -1,0 +1,21 @@
+[
+1902009,  //Treaty Oak Brightside Blonde. api returned Brightside Blonde Ale,
+1785500,  //Twisted X Midnight Magician. api returned Midnight Magician,
+1930151,  //Victory  Blackboard Series No. 5. api returned Blackboard Series (no. 05) Cream Ale With Cold Brew Coffee,
+83450,  //Twisted X Cow Creek. api returned Cow Creek,
+1866223,  //Twisted X Hy-Biscus. api returned ,
+289064,  //Uncle Billy's Green Room. api returned The Green Room IPA,
+1902011,  //Treaty Oak Fitzhugh Mild. api returned Fitzhugh Mild Ale,
+2023768,  //Unibroue Ephemere Elderberry. api returned Éphémère Sureau (Elderberry),
+1206045,  //Twisted X Later Days. api returned Later Days,
+2023539,  //Uncle Billy's Lust for Life. api returned Lust For Life Scotch Ale W/ Poppy,
+136850,  //Twisted X Chupahopra. api returned Chupahopra,
+1511457,  //Twisted X Austin Lager. api returned Austin Lager,
+1589149,  //Unibroue A Tout le Monde. api returned À Tout Le Monde,
+1046722,  //Victory  Sour Monkey. api returned Sour Monkey,
+3787,  //Victory  Golden Monkey. api returned Golden Monkey,
+11821,  //Unibroue 17 Grande Reserve. api returned Grande Réserve 17,
+18545,  //Victory  Summer Love. api returned Summer Love,
+1096244,  //Uncle Billy's Lazy Day. api returned Lazy Day Lager,
+6988  //Unibroue La Fin du Monde. api returned La Fin Du Monde
+]

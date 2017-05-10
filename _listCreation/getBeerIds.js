@@ -7,32 +7,27 @@ const https = require('https');
 
 const clientId = 'B37286DA6E41C3C75634F4C0DB726E889052525C';
 const clientSecret = '8E445ABC27BC99A5D67CBB98AEAA2E936E02AE28';
-const fileName = process.argv[2] || '';
-const writePath = './beerIds/' + fileName + '.js';
-const array = [
-  'Stone Tangerine Express',
-  'Stone Jindia Pale Ale',
-  'Stone Dayslayer',
-  'Stone 2015 Double Bastard',
-  'Sweetwater 420 Extra Pale Ale',
-  'Sweetwater Goin\' Coastal Pineapple IPA',
-  'Sweetwater Cool Breeze Cucumber Saison',
-  'Sweetwater Sweetwater IPA',
-  'Sweetwater Pulled Porter Smoked Bacon Porter',
-  'Thirsty Planet Thirsty Goat',
-  'Thirsty Planet Bucket Head',
-  'Thirsty Planet ChiGoatle',
-  'Treaty Oak Lil Hop IPA'
-];
+const nameArray = require(process.argv[2]);
+const folderName = process.argv[3];
+
+const folderExists = fs.readdirSync('./beerIdLists/').includes(folderName); // ex) data-lists/purge
+const folderPath = './beerIdLists/' + folderName;
+// create the folder if it doesn't exist
+if (!folderExists) {
+  fs.mkdirSync(folderPath);
+}
+// create a number based file name
+const fileName = fs.readdirSync(folderPath).length + '.js';
+const filePath = folderPath + '/' + fileName;
 
 function renderFileContents(data){
   return `
-[${data}
+module.exports = [${data}
 ]`.trim();
 }
 
 function writeFile(template){
-  fs.writeFile(writePath, template, function(err){
+  fs.writeFile(filePath, template, function(err){
     if (err) {
       console.error(err);
     }
@@ -96,4 +91,4 @@ function getBeerIds(array){
     });
   });
 }
-getBeerIds(array);
+getBeerIds(nameArray);
