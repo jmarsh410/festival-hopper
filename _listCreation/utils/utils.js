@@ -18,7 +18,7 @@ module.exports = {
     });
     return {
       id: id,
-      beers: [beers],
+      beers: [beers], // array inside an array, represents the first 'bucket'
       checkCount: 0,
     };
   },

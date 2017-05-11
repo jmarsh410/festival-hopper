@@ -1,3 +1,5 @@
+// command 'node getItems.js {pathToArrayFile} {folderDestination}'
+
 // script that takes an array of beer id's
 // makes untappd api calls for each beer id
 

@@ -1,3 +1,5 @@
+// command 'node getItems.js {pathToArrayFile} {folderDestination}'
+
 // script that takes an array of beer id's
 // makes untappd api calls for each beer id
 
@@ -59,13 +61,21 @@ function getItems(array){
   array.forEach(function(beerId){
     const apiPath = 'https://api.untappd.com/v4/beer/info/' + beerId + '?client_id=' + clientId + '&client_secret=' + clientSecret;
     https.get(apiPath, (res)=>{
-      // log number of requests left
-      console.log('Number of requests left are: ' + res.headers['x-ratelimit-remaining']);
       let data = '';
       res.on('data', (chunk)=>{
         data += chunk;
       });
       res.on('end', ()=>{
+        // log number of requests left
+        console.log('Number of requests left are: ' + res.headers['x-ratelimit-remaining']);
+        // handle errors
+        if (res.statusCode !== 200) {
+          const meta = JSON.parse(data).meta;
+          const errorMessage = meta.developer_friendly ? meta.developer_friendly : meta.error_detail;
+          console.log('error getting' + beerId + '. status code ' + res.statusCode);
+          console.log(errorMessage);
+          return;
+        }
         // add in a new line for prettier printing in the file
         const beer = '\n' + JSON.stringify(JSON.parse(data).response.beer);
         beers.push(beer);

@@ -1,4 +1,4 @@
-[
+module.exports = [
 1902009,  //Treaty Oak Brightside Blonde. api returned Brightside Blonde Ale,
 1785500,  //Twisted X Midnight Magician. api returned Midnight Magician,
 1930151,  //Victory  Blackboard Series No. 5. api returned Blackboard Series (no. 05) Cream Ale With Cold Brew Coffee,
@@ -18,4 +18,4 @@
 18545,  //Victory  Summer Love. api returned Summer Love,
 1096244,  //Uncle Billy's Lazy Day. api returned Lazy Day Lager,
 6988  //Unibroue La Fin du Monde. api returned La Fin Du Monde
-]
+];

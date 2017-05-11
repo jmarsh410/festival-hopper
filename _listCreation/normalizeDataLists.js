@@ -1,4 +1,4 @@
-// command 'node normalizeDataLists.js {pathToFolder} {fileName}'
+// command 'node normalizeDataLists.js {pathToFolderThatContainsLists} {fileName}'
 
 const fs = require('fs');
 const _ = require('lodash');
@@ -6,6 +6,7 @@ const _ = require('lodash');
 const utils = require('./utils/utils');
 const pathToFolder = process.argv[2];
 const fileName = process.argv[3];
+
 if (!(pathToFolder || fileName)) {
   return console.error('the command line arguments were incorrect');
 }
@@ -17,7 +18,9 @@ const filePaths = files.map((string)=>{
 const contents = filePaths.map((string)=>{
   return require(string);
 });
-const items = _.flatten(contents);
-const normalizedItems = utils.makeCuratedList(items, fileName);
-console.log(normalizedItems.beers);
-
+// TODO: double check that the deDuping worked
+const items = _.uniqBy(_.flatten(contents), 'bid');
+const normalizedItems = JSON.stringify(utils.makeCuratedList(items, fileName));
+const data = `const ${fileName} = ${normalizedItems};
+export default ${fileName};`.trim();
+fs.writeFileSync('./normalizedLists/' + fileName + '.js', data);

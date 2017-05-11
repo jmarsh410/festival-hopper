@@ -1,4 +1,4 @@
-[
+module.exports = [
 1512388,  //Stone Tangerine Express. api returned Tangerine Express IPA,
 1961981,  //Sweetwater Cool Breeze Cucumber Saison. api returned Cool Breeze,
 1424308,  //Sweetwater Goin' Coastal Pineapple IPA. api returned Goin' Coastal,
@@ -12,4 +12,4 @@
 5912,  //Sweetwater 420 Extra Pale Ale. api returned 420 Extra Pale Ale,
 1933139,  //Stone Jindia Pale Ale. api returned Stone Jindia Pale Ale,
 7053  //Sweetwater Sweetwater IPA. api returned IPA
-]
+];
