@@ -145,7 +145,8 @@ class BeerListContainer extends Component {
       // check whether this is a curated(stored) list or a list that needs an api call
       if (this.listType === 'curated') {
         // make sure the beers in the dataset are curated/normalized
-        const list = utils.makeCuratedList(DataLists[this.listId], this.listId);
+        // const list = utils.makeCuratedList(DataLists[this.listId], this.listId);
+        const list = DataLists[this.listId];
         this.updateList(list);
       } else {
         // if this list hasn't been saved, get it
