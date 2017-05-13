@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import Beer from './beer';
+import BeerListControls from './beer-list-controls';
 import List from './list';
 import utils from '../utils/utils';
 import DataLists from '../data-lists';
@@ -196,7 +197,10 @@ class BeerListContainer extends Component {
       formData.append('timezone', 'PST');
       formData.append('bid', beerId);
       formData.append('shout', description);
-      formData.append('rating', rating);
+      // only include ratings of 1 and higher. untappd won't accept lower values
+      if (rating >= 1) {
+        formData.append('rating', rating);
+      }
       const fetchOpts = {
         method: 'POST',
         body: formData,
@@ -309,6 +313,7 @@ class BeerListContainer extends Component {
     });
   }
   getFilteredItems(){
+    var self = this;
     // filter the list based on current 'search' and 'sort' fields
     let beers = _.flatten(this.state.list.beers);
     // filter by search terms
@@ -377,10 +382,10 @@ class BeerListContainer extends Component {
     }
     return (
       <div className="beers">
-        <div className="list-controls">
-          <Search inputName="beer-search" placeholder="Search list" handleSubmit={this.handleSearchSubmit}/>
+        <BeerListControls>
+          <Search inputName="beer-search" placeholder="Search beer name..." handleSubmit={this.handleSearchSubmit}/>
           <Select id="beers-sort" label="Sort By:" options={['Brewery', 'A-Z']} handleChange={this.handleSortChange}/>
-        </div>
+        </BeerListControls>
         <List items={this.getFilteredItems()} type={Beer} onClick={this.handleBeerClick} onChange={this.handleInputChange}/>
         {loadingSpinner}
         {button}
