@@ -14,6 +14,7 @@
   --light-gray: #ddd;
 
   --fs-base: 14px;
+  --fs-input: 16px;
   --fs-l: 2em;
   --fs-m: 1.5em;
   --fs-s: var(--fs-base);
