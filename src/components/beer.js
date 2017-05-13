@@ -40,7 +40,7 @@ class Beer extends Component {
           <div className="beer-drawerInner">
             <textarea className="beer-description" maxLength="140" defaultValue={description}></textarea>
             <div className="beer-rating">
-              <input type="range" min="1" max="5" step=".25" defaultValue={rating} className="beer-slider"/>
+              <input type="range" min="0" max="5" step=".5" defaultValue={rating} className="beer-slider"/>
               <div className="beer-sliderValue">{rating}</div>
             </div>
           </div>
