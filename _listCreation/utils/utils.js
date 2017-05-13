@@ -7,7 +7,7 @@ module.exports = {
         name: beer.beer_name,
         brewery: beer.brewery.brewery_name,
         image: beer.beer_label,
-        rating: 3,
+        rating: 0,
         isCheckedIn: false,
         isOpen: false,
         checked: false,
