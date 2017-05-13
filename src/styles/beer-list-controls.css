@@ -1,0 +1,24 @@
+.beerListControls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 10px;
+  background: var(--light-gray);
+  border-bottom: 1px solid var(--gray);
+}
+/*.beerListControls > * {
+  margin: 5px;
+}*/
+.beerListControls .search {
+  flex: 1 1 51%;
+  margin-bottom: 10px;
+}
+.beerListControls .select {
+  flex: 1 1 51%;
+}
+/*@media screen and (min-width:700px) {
+  .beerListControls .select {
+    padding-left: 20px;
+  }
+}*/

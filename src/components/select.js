@@ -1,6 +1,7 @@
 /* jshint ignore:start */
 
 import React, { Component } from 'react';
+import '../styles/select.css';
 
 class Select extends Component {
   render(){
@@ -8,9 +9,9 @@ class Select extends Component {
       <option key={name} value={name}>{name}</option>
     );
     return (
-      <div className="dropdown">
-        <label htmlFor={this.props.id}>{this.props.label}</label>
-        <select onChange={this.props.handleChange} name={this.props.id} id={this.props.id}>
+      <div className="select">
+        <label className="select-label" htmlFor={this.props.id}>{this.props.label}</label>
+        <select className="select-select" onChange={this.props.handleChange} name={this.props.id} id={this.props.id}>
           {options}
         </select>
       </div>
