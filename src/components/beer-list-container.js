@@ -40,7 +40,6 @@ class BeerListContainer extends Component {
       sortField: 'brewery',
     };
     this.handleCheckInClick = this.handleCheckInClick.bind(this);
-    this.handleBeerClick = this.handleBeerClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.handleModalClick = this.handleModalClick.bind(this);
@@ -242,27 +241,6 @@ class BeerListContainer extends Component {
         });
     });
   }
-  handleBeerClick(e) {
-    const target = e.target;
-    // don't do anything if the beer has already been checkedIn
-    if (target.closest('.beer.checkedIn')){
-      e.preventDefault();
-      return;
-    }
-    if (target.closest('.beer-checkbox')) {
-      return;
-    } else if (target.closest('.beer-main')) {
-      // click came from .beer-main, so open the drawer
-      const row = target.closest('.beer');
-      const bucket = row.getAttribute('data-bucket');
-      const index = row.getAttribute('data-index');
-      this.setState((prevState)=>{
-        // reverse the openness property that is on the item 
-        prevState.list.beers[bucket][index].isOpen = prevState.list.beers[bucket][index].isOpen === true ? false : true;
-        return { list: prevState.list };
-      });
-    }
-  }
   handleInputChange(e){
     const target = e.target;
     // don't do anything if the beer has already been checkedIn
@@ -273,9 +251,30 @@ class BeerListContainer extends Component {
     const row = target.closest('.beer');
     const bucket = row.getAttribute('data-bucket');
     const index = row.getAttribute('data-index');
-    if (target.classList.contains('beer-slider')) {
+    // make it a favorite
+    if (target.closest('.beer-favorite')) {
       this.setState((prevState)=>{
-        prevState.list.beers[bucket][index].rating = target.value;
+        prevState.list.beers[bucket][index].isFavorite = prevState.list.beers[bucket][index].isFavorite === true ? false : true;
+        return { list: prevState.list };
+      });
+    }
+    // check the beer
+    if (target.closest('.beer-checkbox')) {
+      this.setState((prevState)=>{
+        if (target.checked === true) {
+          ++prevState.list.checkCount;
+        } else {
+          --prevState.list.checkCount;
+        }
+        prevState.list.beers[bucket][index].checked = target.checked;
+        return { list: prevState.list };
+      });
+    }
+    // open the drawer
+    if (target.closest('.beer-drawerToggle')) {
+      this.setState((prevState)=>{
+        // reverse the openness property that is on the item 
+        prevState.list.beers[bucket][index].isOpen = prevState.list.beers[bucket][index].isOpen === true ? false : true;
         return { list: prevState.list };
       });
     }
@@ -285,14 +284,9 @@ class BeerListContainer extends Component {
         return { list: prevState.list };
       });
     }
-    if (target.classList.contains('checkbox-input')) {
+    if (target.classList.contains('beer-slider')) {
       this.setState((prevState)=>{
-        if (target.checked === true) {
-          ++prevState.list.checkCount;
-        } else {
-          --prevState.list.checkCount;
-        }
-        prevState.list.beers[bucket][index].checked = target.checked;
+        prevState.list.beers[bucket][index].rating = target.value;
         return { list: prevState.list };
       });
     }
@@ -310,6 +304,11 @@ class BeerListContainer extends Component {
     console.log(value);
     this.setState({
       sortField: value,
+    });
+  }
+  getFavoriteItems(){
+    return _.filter(this.getFilteredItems(), (item)=>{
+      return item.isFavorite === true;
     });
   }
   getFilteredItems(){
@@ -339,7 +338,7 @@ class BeerListContainer extends Component {
     window.removeEventListener('scroll', this.handleScroll);
   }
   render(){
-    const self = this;
+    // const self = this;
     // update the beer list on localStorage each time the state changes
     if (this.state.list.beers !== null){
       this.updateStorage(this.state.list);
@@ -384,9 +383,10 @@ class BeerListContainer extends Component {
       <div className="beers">
         <BeerListControls>
           <Search inputName="beer-search" placeholder="Search beer name..." handleSubmit={this.handleSearchSubmit}/>
-          <Select id="beers-sort" label="Sort By:" options={['Brewery', 'A-Z']} handleChange={this.handleSortChange}/>
+          <Select id="beers-sort" label="Sort By:" options={['Brewery Name A-Z', 'Beer Name A-Z']} handleChange={this.handleSortChange}/>
         </BeerListControls>
-        <List items={this.getFilteredItems()} type={Beer} onClick={this.handleBeerClick} onChange={this.handleInputChange}/>
+        <List title="Favorites" items={this.getFavoriteItems()} type={Beer} onChange={this.handleInputChange}/>
+        <List title={this.listId} items={this.getFilteredItems()} type={Beer} onChange={this.handleInputChange}/>
         {loadingSpinner}
         {button}
         {modal}

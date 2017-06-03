@@ -1,0 +1,100 @@
+.checkbox {
+  position: relative;
+}
+.checkbox-input {
+  opacity: 0;
+  display: block;
+  width: 25px;
+  height: 25px;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+}
+.checkbox-vis {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+.checkbox--normal .checkbox-vis {
+  background-color: #ccc;
+}
+.checkbox--normal .checkbox-vis:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  display: block;
+  width: 6px;
+  height: 12px;
+  border: solid #000;
+  border-width: 0 4px 4px 0;
+  transform: translateY(-2px) rotate(45deg);
+  transition: .1s opacity ease;
+  opacity: 0;
+}
+.checkbox--normal .checkbox-input[data-checked="true"] + .checkbox-vis:before,
+.checkbox--normal .checkbox-input[data-checked="true"] + .checkbox-vis:before {
+  opacity: 1;
+}
+.checkbox--favorite .checkbox-vis {
+  background-color: var(--gray);
+  height: 12px;
+  width: 12px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: rotate(-45deg);
+}
+.checkbox--favorite .checkbox-vis:before,
+.checkbox--favorite .checkbox-vis:after {
+  content: "";
+  background-color: var(--gray);
+  border-radius: 50%;
+  height: 12px;
+  position: absolute;
+  width: 12px;
+}
+.checkbox--favorite .checkbox-vis:before {
+  top: -6px;
+  left: 0;
+}
+.checkbox--favorite .checkbox-vis:after {
+  left: 6px;
+  top: 0;
+}
+.checkbox--favorite .checkbox-input[data-checked="true"] + .checkbox-vis,
+.checkbox--favorite .checkbox-input[data-checked="true"] + .checkbox-vis:before,
+.checkbox--favorite .checkbox-input[data-checked="true"] + .checkbox-vis:after {
+  background-color: var(--positive);
+}
+.checkbox--arrow .checkbox-vis {
+  background-color: transparent;
+}
+.checkbox--arrow .checkbox-vis:before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--positive);
+  border-bottom: 2px solid var(--positive);
+  transform: translateY(-4px) rotate(45deg);
+  transform-origin: 50% 50%;
+  transition: .3s all ease;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+.checkbox--arrow .checkbox-input[data-checked="true"] + .checkbox-vis:before {
+  transform: rotate(225deg);
+}

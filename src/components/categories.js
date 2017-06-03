@@ -12,12 +12,6 @@ import '../styles/categories.css';
 const Items = [
   {
     id: utils.generateId(),
-    name: 'ABW-6th-Anniversary',
-    location: 'Austin Beerworks',
-    img: image,
-  },
-  {
-    id: utils.generateId(),
     name: 'Index Fest',
     location: 'Austin Statesman',
     img: image,

@@ -10,10 +10,11 @@ class Beer extends Component {
     const name = this.props.data.name;
     const brewery = this.props.data.brewery;
     const image = this.props.data.image;
-    const checked = this.props.data.checked;
     const rating = this.props.data.rating;
     const description = this.props.data.description;
     const isCheckedIn = this.props.data.isCheckedIn;
+    const isFavorite = this.props.data.isFavorite;
+    const checked = this.props.data.checked;
     const isOpen = this.props.data.isOpen;
     const bucket = this.props.data.bucket;
     const index = this.props.data.index;
@@ -34,7 +35,11 @@ class Beer extends Component {
             <div className="beer-name">{name}</div>
             <div className="beer-brewery">{brewery}</div>
           </div>
-          <Checkbox classes="beer-checkbox" checked={checked}/>
+          <div className="beer-actions">
+            <Checkbox classes="beer-favorite checkbox--favorite" checked={isFavorite}/>
+            <Checkbox classes="beer-checkbox checkbox--normal" checked={checked}/>
+            <Checkbox classes="beer-drawerToggle checkbox--arrow" checked={isOpen}/>
+          </div>
         </div>
         <div className="beer-drawer">
           <div className="beer-drawerInner">
