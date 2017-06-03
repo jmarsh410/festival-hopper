@@ -15,7 +15,8 @@ class List extends Component {
       return <li key={key} className="list-item"><Type index={i} data={item}/></li>;
     });
     let title = null;
-    if (this.props.title) {
+    // don't show title if there are no items in the list
+    if (this.props.title && html.length > 0) {
       title = (<h1 className="list-title">{ this.props.title }</h1>);
     }
     return (
