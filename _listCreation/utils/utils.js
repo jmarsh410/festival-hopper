@@ -11,6 +11,7 @@ module.exports = {
         isCheckedIn: false,
         isOpen: false,
         checked: false,
+        isFavorite: false,
         bucket: 0, // curated lists have only 1 bucket and will always have a bucket value of 0
         index: i,
       };
