@@ -1,4 +1,5 @@
 .list-title {
+  font-family: var(--title-font-family);
   text-align: center;
 }
 .list-main {

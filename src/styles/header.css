@@ -16,6 +16,7 @@
 }
 .header-logo {
   font-size: var(--fs-l);
+  font-family: var(--title-font-family);
 }
 .header-logout {
   color: white;
