@@ -1,0 +1,7 @@
+
+RewriteEngine on
+
+RewriteCond %{HTTP_HOST} ^festivalhopper\.jeredmarshall\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.festivalhopper\.jeredmarshall\.com$
+RewriteRule ^((?!(\.js|\.css)).)+$ "http\:\/\/festivalhopper\.jeredmarshall\.com\/" [R=301,L]
+
