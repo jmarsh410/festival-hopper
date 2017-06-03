@@ -22,9 +22,9 @@ const apiCallInfo = {
   }
 };
 
-const searchTerms = {
-  brewery: 'brewery',
-  'a-z': 'name',
+const sortTerms = {
+  'Brewery Name A-Z': 'brewery',
+  'Beer Name A-Z': 'name',
 }
 
 class BeerListContainer extends Component {
@@ -37,7 +37,7 @@ class BeerListContainer extends Component {
       notifications: [],
       waiting: false,
       searchField: null,
-      sortField: 'brewery',
+      sortField: Object.keys(sortTerms)[0],
     };
     this.handleCheckInClick = this.handleCheckInClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -301,7 +301,6 @@ class BeerListContainer extends Component {
   }
   handleSortChange(e){
     const value = e.target.value;
-    console.log(value);
     this.setState({
       sortField: value,
     });
@@ -323,7 +322,7 @@ class BeerListContainer extends Component {
     }
     // filter by sort term
     if (_.isString(this.state.sortField) && this.state.sortField.length > 0) {
-      const term = searchTerms[this.state.sortField.toLowerCase()];
+      const term = sortTerms[this.state.sortField];
       beers = _.sortBy(beers, [term]);
     }
     return beers;
@@ -383,7 +382,7 @@ class BeerListContainer extends Component {
       <div className="beers">
         <BeerListControls>
           <Search inputName="beer-search" placeholder="Search beer name..." handleSubmit={this.handleSearchSubmit}/>
-          <Select id="beers-sort" label="Sort By:" options={['Brewery Name A-Z', 'Beer Name A-Z']} handleChange={this.handleSortChange}/>
+          <Select id="beers-sort" label="Sort By:" options={Object.keys(sortTerms)} handleChange={this.handleSortChange}/>
         </BeerListControls>
         <List title="Favorites" items={this.getFavoriteItems()} type={Beer} onChange={this.handleInputChange}/>
         <List title={this.listId} items={this.getFilteredItems()} type={Beer} onChange={this.handleInputChange}/>
