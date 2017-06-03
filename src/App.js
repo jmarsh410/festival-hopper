@@ -8,11 +8,10 @@ import {
 } from 'react-router-dom';
 import Header from './components/header';
 import Nav from './components/nav';
-import Login from './components/login.js';
+import Login from './components/login';
 import Categories from './components/categories';
 import BrewerySearch from './components/brewery-search';
 import BeerListContainer from './components/beer-list-container';
-import './App.css';
 
 const urlParameter = '#access_token=';
 // const client_id = 'B37286DA6E41C3C75634F4C0DB726E889052525C';
